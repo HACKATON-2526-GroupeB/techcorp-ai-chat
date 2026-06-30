@@ -1,2 +1,3 @@
-*.parquet
-*.jsonl
+interim/*
+processed/*
+raw/*
