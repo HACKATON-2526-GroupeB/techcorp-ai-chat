@@ -20,6 +20,14 @@
 
 **Décision** : Ollama est retenu pour sa rapidité de déploiement, sa gestion native des modèles quantisés, et son API REST immédiatement consommable par l'équipe DEV WEB — critique dans le contexte du challenge 7h.
 
+### Décision de sécurité — modèle de base, pas le checkpoint hérité
+
+INFRA déploie le modèle de base `phi3.5` (vanilla) avec un system prompt spécialisé domaine financier, plutôt que le checkpoint fine-tuné hérité de l'équipe précédente. Ce choix est délibéré et lié à l'audit de sécurité en cours mené par l'équipe CYBER.
+
+> **INFRA deploys the base `phi3.5` model with a domain-specific system prompt rather than the compromised fine-tuned checkpoint inherited from the previous team, pending CYBER's audit clearance of `finance_dataset_final.json`.**
+
+Tant que CYBER n'a pas confirmé que `datasets/finance_dataset_final.json` est exempt de backdoor (trigger, persistance dans le dataset), aucun fine-tuning ou checkpoint dérivé de ce dataset ne sera chargé sur le serveur Ollama de production. Le profil `phi3-financial` actuellement déployé n'a jamais été entraîné sur ce dataset — il s'agit uniquement du modèle de base `phi3.5` enrichi d'un system prompt, donc non affecté par la backdoor identifiée par CYBER.
+
 ---
 
 ## 2. Architecture Déployée
