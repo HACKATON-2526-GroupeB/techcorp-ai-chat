@@ -1,7 +1,31 @@
 # TechCorp AI Chat
 
-Assistant IA financier spécialisé basé sur **Ollama + Phi-3.5-Financial**, déployé sans accès root sur Debian 13. 
+Assistant IA financier spécialisé basé sur **Ollama + Phi-3.5-Financial**, déployé sans accès root sur Debian 13.
 Interface accessible sur **https://4ride.online**
+
+Challenge IA Interfiliere - Groupe B - YNOV Lyon 2026
+
+---
+
+## Equipe
+
+| Nom | Filiere | Niveau |
+|---|---|---|
+| NOBLET Alexandre | DEV | M1 |
+| PINHEIRO Philippe | DEV | M1 |
+| KOUAKOU Elie Marc | DEV | B3 |
+| NOUALI Malcom | DEV | M1 |
+| REZIG Rachid | DEV | M1 |
+| DEMERGÉ Guillaume | IA | M1 |
+| CALVO Tom | IA | B3 |
+| SINTONDJI Ange Bignona | IA | M1 |
+| MASSO LACROIX Erine Grace | IA | B3 |
+| NAMANI Samuel | CYBER | M1 |
+| QUAGLIERI Lisa | CYBER | B3 |
+| JANUTOLO Ugo | CYBER | B3 |
+| GUTTIN Arnaud | INFRA | M1 |
+| HAMDY Iman | INFRA | B3 |
+| BADIN Matthieu | INFRA | M1 |
 
 ---
 
