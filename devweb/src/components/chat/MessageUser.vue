@@ -1,16 +1,14 @@
 <script setup>
 defineProps({ message: Object })
-function fmt(ts) {
-  return new Date(ts).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-}
+function fmt(ts) { return new Date(ts).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}) }
 </script>
 <template>
-  <div class="flex justify-end mb-5 px-4">
-    <div class="max-w-[70%]">
-      <div class="bg-indigo-600/25 border border-indigo-500/20 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-white whitespace-pre-wrap">
+  <div class="flex justify-end mb-6 px-4">
+    <div class="max-w-[72%]">
+      <div class="px-4 py-3 rounded-2xl rounded-tr-sm text-sm text-white leading-relaxed whitespace-pre-wrap" style="background:linear-gradient(135deg,rgba(124,92,252,0.25),rgba(90,79,207,0.2));border:1px solid rgba(124,92,252,0.2)">
         {{ message.content }}
       </div>
-      <p class="text-[10px] text-white/20 mt-1 text-right pr-1">{{ fmt(message.ts) }}</p>
+      <p class="text-[10px] text-white/20 mt-1.5 text-right">{{ fmt(message.ts) }}</p>
     </div>
   </div>
 </template>

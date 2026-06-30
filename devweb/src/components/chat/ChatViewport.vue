@@ -9,13 +9,18 @@ const emit  = defineEmits(['suggest'])
 const viewport      = ref(null)
 const showScrollBtn = ref(false)
 
+const CATEGORIES = [
+  { icon: 'bar_chart',      color: '#7C5CFC', label: 'Analyse financière',   desc: 'Posez des questions sur des rapports, ratios et tendances.' },
+  { icon: 'trending_up',    color: '#4F8DFF', label: 'Données & marchés',    desc: 'Interrogez les données de marché, actions, indices et plus.' },
+  { icon: 'description',    color: '#22C55E', label: 'Résumés rapides',       desc: "Obtenez des résumés clairs d'informations financières." },
+  { icon: 'lightbulb',      color: '#F59E0B', label: 'Conseils & explications', desc: 'Comprenez les concepts financiers simplement.' },
+]
+
 const SUGGESTIONS = [
   "Qu'est-ce que l'EBITDA ?",
-  "Différence entre actif et passif ?",
+  "Expliquez le ratio CET1 Bâle III",
   "Comment fonctionne MiFID II ?",
-  "Qu'est-ce que le ratio CET1 Bâle III ?",
-  "Expliquez le free cash flow",
-  "Comment calculer le BFR ?",
+  "Quelle est la différence entre actif et passif ?",
 ]
 
 const streamingMsg = computed(() => {
@@ -24,9 +29,7 @@ const streamingMsg = computed(() => {
   return last?.role === 'assistant' ? last : null
 })
 
-function isStreaming(msg) {
-  return streamingMsg.value === msg
-}
+function isStreaming(msg) { return streamingMsg.value === msg }
 
 async function scrollBottom() {
   await nextTick()
@@ -36,7 +39,7 @@ async function scrollBottom() {
 function onScroll() {
   if (!viewport.value) return
   const { scrollTop, scrollHeight, clientHeight } = viewport.value
-  showScrollBtn.value = scrollHeight - scrollTop - clientHeight > 120
+  showScrollBtn.value = scrollHeight - scrollTop - clientHeight > 100
 }
 
 watch(() => props.messages, scrollBottom, { deep: true })
@@ -44,46 +47,77 @@ watch(() => props.messages, scrollBottom, { deep: true })
 
 <template>
   <div class="relative flex-1 overflow-hidden">
-    <div ref="viewport" class="h-full overflow-y-auto py-6 scroll-smooth" @scroll="onScroll">
+    <div ref="viewport" class="h-full overflow-y-auto" @scroll="onScroll">
 
-      <!-- Welcome / empty state -->
-      <div v-if="!messages.length" class="flex flex-col items-center justify-center h-full gap-8 px-6 select-none">
-        <div class="text-center">
-          <div class="w-16 h-16 rounded-2xl bg-indigo-600/20 border border-indigo-500/20 flex items-center justify-center mx-auto mb-4">
-            <span class="material-symbols-outlined text-[32px] text-indigo-400">auto_awesome</span>
+      <!-- Welcome screen -->
+      <div v-if="!messages.length" class="flex flex-col items-center justify-center min-h-full py-12 px-8">
+        <!-- Hero -->
+        <div class="text-center mb-10 animate-float">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg,#7C5CFC,#5A4FCF);box-shadow:0 8px 32px rgba(124,92,252,0.4)">
+            <span class="material-symbols-outlined text-white text-[32px]">auto_awesome</span>
           </div>
-          <h2 class="text-white text-xl font-semibold mb-1">TechCorp AI Financial</h2>
-          <p class="text-white/40 text-sm">Assistant spécialisé IFRS · GAAP · MiFID II · Bâle III</p>
+          <h1 class="text-4xl font-bold text-white mb-3" style="letter-spacing:-0.02em">Bonjour !</h1>
+          <p class="text-white/50 text-base">Je suis votre assistant IA. Posez votre première question financière.</p>
         </div>
 
-        <!-- Suggested prompts -->
-        <div class="flex flex-wrap gap-2 justify-center max-w-lg">
+        <!-- Category cards -->
+        <div class="grid grid-cols-2 gap-3 w-full max-w-2xl mb-8 card-stagger">
+          <button
+            v-for="c in CATEGORIES"
+            :key="c.label"
+            class="card text-left p-5 cursor-pointer group"
+            @click="emit('suggest', c.label)"
+          >
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition group-hover:scale-110" :style="`background:${c.color}22`">
+              <span class="material-symbols-outlined text-[20px]" :style="`color:${c.color}`">{{ c.icon }}</span>
+            </div>
+            <p class="text-sm font-semibold text-white mb-1">{{ c.label }}</p>
+            <p class="text-xs text-white/40 leading-relaxed">{{ c.desc }}</p>
+            <div class="flex items-center justify-end mt-3">
+              <span class="w-6 h-6 rounded-full flex items-center justify-center text-white/30 group-hover:text-white group-hover:bg-white/10 transition" style="border:1px solid rgba(255,255,255,0.1)">
+                <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+              </span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Suggested questions -->
+        <div class="flex flex-wrap gap-2 justify-center max-w-xl">
           <button
             v-for="s in SUGGESTIONS"
             :key="s"
-            class="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20 transition text-left"
+            class="px-3.5 py-2 rounded-full text-xs text-white/55 hover:text-white transition border border-white/8 hover:border-[#7C5CFC]/40 hover:bg-[#7C5CFC]/10"
+            style="background:rgba(255,255,255,0.03)"
             @click="emit('suggest', s)"
           >
             {{ s }}
           </button>
         </div>
+
+        <!-- Security note -->
+        <p class="mt-6 text-xs text-white/25 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[14px]">shield</span>
+          Vos données sont sécurisées et confidentielles.
+        </p>
       </div>
 
       <!-- Messages -->
-      <TransitionGroup name="msg" tag="div" v-else>
-        <template v-for="msg in messages" :key="msg.ts">
-          <MessageUser v-if="msg.role === 'user'" :message="msg" />
-          <MessageAI   v-else :message="msg" :streaming="isStreaming(msg)" />
-        </template>
-      </TransitionGroup>
+      <div v-else class="py-6 max-w-3xl mx-auto">
+        <TransitionGroup name="msg" tag="div">
+          <template v-for="msg in messages" :key="msg.ts">
+            <MessageUser v-if="msg.role === 'user'" :message="msg" />
+            <MessageAI   v-else :message="msg" :streaming="isStreaming(msg)" />
+          </template>
+        </TransitionGroup>
 
-      <!-- Typing dots (standalone, when AI message is empty) -->
-      <div v-if="loading && streamingMsg && !streamingMsg.content" class="flex gap-3 px-4 mb-4">
-        <div class="w-8 h-8 rounded-xl bg-indigo-600/50 flex items-center justify-center flex-shrink-0">
-          <span class="material-symbols-outlined text-[16px] text-white">auto_awesome</span>
-        </div>
-        <div class="bg-white/5 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-1">
-          <span class="dot" /><span class="dot" style="animation-delay:.15s" /><span class="dot" style="animation-delay:.3s" />
+        <!-- Typing dots -->
+        <div v-if="loading && streamingMsg && !streamingMsg.content" class="flex gap-3 px-4 mb-4 items-start">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#7C5CFC,#5A4FCF)">
+            <span class="material-symbols-outlined text-white text-[15px]">auto_awesome</span>
+          </div>
+          <div class="px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1.5" style="background:#181825;border:1px solid rgba(255,255,255,0.06)">
+            <span v-for="i in 3" :key="i" class="w-1.5 h-1.5 rounded-full bg-white/40 animate-dot" :style="`animation-delay:${(i-1)*0.15}s`" />
+          </div>
         </div>
       </div>
     </div>
@@ -92,7 +126,8 @@ watch(() => props.messages, scrollBottom, { deep: true })
     <Transition name="fade">
       <button
         v-if="showScrollBtn"
-        class="absolute bottom-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white backdrop-blur-sm border border-white/10 transition shadow-lg"
+        class="absolute bottom-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white transition shadow-lg border border-white/10"
+        style="background:#181825"
         @click="scrollBottom"
       >
         <span class="material-symbols-outlined text-[20px]">keyboard_arrow_down</span>
@@ -100,23 +135,3 @@ watch(() => props.messages, scrollBottom, { deep: true })
     </Transition>
   </div>
 </template>
-
-<style scoped>
-.msg-enter-active { transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.msg-enter-from   { opacity: 0; transform: translateY(12px); }
-
-.fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-
-.dot {
-  display: inline-block;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.5);
-  animation: bounce 0.8s ease-in-out infinite;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  50%       { transform: translateY(-5px); opacity: 1; }
-}
-</style>
