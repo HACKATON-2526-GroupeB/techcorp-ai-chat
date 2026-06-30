@@ -14,6 +14,7 @@ const loading          = ref(false)
 const ollamaOnline     = ref(false)
 const activeModel      = ref('phi3-financial:latest')
 const currentSessionId = ref(null)
+let abortController    = null
 
 export function useChat() {
   async function checkStatus() {
@@ -39,19 +40,27 @@ export function useChat() {
       .slice(0, -1)
       .map(m => ({ role: m.role, content: m.content }))
 
+    abortController = new AbortController()
+
     try {
       for await (const chunk of streamChat(
         history, activeModel.value, ollamaUrl.value,
-        { temperature: temperature.value, maxTokens: maxTokens.value }
+        { temperature: temperature.value, maxTokens: maxTokens.value, signal: abortController.signal }
       )) {
         aiMsg.content += chunk
       }
     } catch (err) {
-      const entry     = push(err)
-      const type      = entry.type
-      aiMsg.error     = true
-      aiMsg.errorType = type
-      aiMsg.content   = chatErrorMessage(type, entry.detail)
+      if (err.name === 'AbortError') {
+        // User stopped generation — keep partial content, no error shown
+      } else {
+        const entry     = push(err)
+        const type      = entry.type
+        aiMsg.error     = true
+        aiMsg.errorType = type
+        aiMsg.content   = chatErrorMessage(type, entry.detail)
+      }
+    } finally {
+      abortController = null
     }
 
     loading.value = false
@@ -80,8 +89,12 @@ export function useChat() {
     currentSessionId.value = session.id
   }
 
+  function stop() {
+    if (abortController) abortController.abort()
+  }
+
   return {
     messages, loading, ollamaOnline, activeModel, currentSessionId,
-    send, clearChat, loadSession, checkStatus,
+    send, stop, clearChat, loadSession, checkStatus,
   }
 }

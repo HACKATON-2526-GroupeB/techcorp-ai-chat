@@ -30,10 +30,11 @@ export async function listModels(baseUrl) {
   return (data.models ?? []).map(m => m.name)
 }
 
-export async function* streamChat(messages, model, baseUrl, { temperature = 0.7, maxTokens = 2048 } = {}) {
+export async function* streamChat(messages, model, baseUrl, { temperature = 0.7, maxTokens = 2048, signal } = {}) {
   const res = await fetch(`${baseUrl}/api/chat`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal,
     body: JSON.stringify({
       model,
       messages,

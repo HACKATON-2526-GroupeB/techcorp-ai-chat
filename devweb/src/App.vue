@@ -8,7 +8,7 @@ import SettingsPanel from './components/settings/SettingsPanel.vue'
 import { useChat }   from './composables/useChat'
 import { useModels } from './composables/useModels'
 
-const { messages, loading, ollamaOnline, send, clearChat, checkStatus } = useChat()
+const { messages, loading, ollamaOnline, send, stop, clearChat, checkStatus } = useChat()
 const { fetchModels } = useModels()
 
 const showSettings = ref(false)
@@ -40,7 +40,7 @@ onUnmounted(() => clearInterval(statusInterval))
 
       <ChatViewport :messages="messages" :loading="loading" />
 
-      <InputArea :loading="loading" @send="send" />
+      <InputArea :loading="loading" @send="send" @stop="stop" />
     </main>
 
     <SettingsPanel :show="showSettings" @close="showSettings = false" />

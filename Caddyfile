@@ -1,0 +1,22 @@
+{
+    admin off
+    auto_https off
+    servers {
+        protocols h1 h2
+    }
+}
+
+:8443 {
+    tls /home/ia/techcorp-ai-chat/scripts/ssl/fullchain.pem /home/ia/techcorp-ai-chat/scripts/ssl/key.pem
+
+    root * /home/ia/techcorp-ai-chat/devweb/dist
+
+    handle /api/* {
+        reverse_proxy localhost:11434
+    }
+
+    handle {
+        file_server
+        try_files {path} /index.html
+    }
+}

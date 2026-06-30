@@ -3,6 +3,10 @@
 
 import ssl, os, urllib.request, urllib.error
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
+
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
 
 BACKEND  = os.environ.get("BACKEND", "http://localhost:11434")
 PORT     = int(os.environ.get("PORT", "8443"))
@@ -101,7 +105,7 @@ if __name__ == '__main__':
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ctx.load_cert_chain(CERT, KEY)
 
-    server = HTTPServer(('0.0.0.0', PORT), ProxyHandler)
+    server = ThreadedHTTPServer(('0.0.0.0', PORT), ProxyHandler)
     server.socket = ctx.wrap_socket(server.socket, server_side=True)
 
     print(f"[*] HTTPS proxy: https://0.0.0.0:{PORT} → {BACKEND}")

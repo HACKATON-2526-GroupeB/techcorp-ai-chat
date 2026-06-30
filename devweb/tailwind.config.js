@@ -2,6 +2,7 @@
 export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{vue,js}'],
+  plugins: [require('@tailwindcss/typography')],
   theme: {
     extend: {
       colors: {

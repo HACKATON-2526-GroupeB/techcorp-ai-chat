@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
 
-export const DEFAULT_URL = 'http://4ride.online'
+export const DEFAULT_URL = 'https://4ride.online'
 
 function normalizeUrl(url) {
   const u = (url ?? '').trim().replace(/\/$/, '')
@@ -13,7 +13,7 @@ function normalizeUrl(url) {
 function loadUrl() {
   const stored = localStorage.getItem('ollamaUrl')
   // Migrate old defaults (localhost or https with invalid cert) to the working URL
-  if (!stored || stored === 'http://localhost:11434' || stored === 'https://4ride.online') {
+  if (!stored || stored === 'http://localhost:11434' || stored === 'http://4ride.online') {
     return DEFAULT_URL
   }
   return normalizeUrl(stored)
