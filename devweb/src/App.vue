@@ -11,7 +11,9 @@ import { useModels } from './composables/useModels'
 
 const { messages, loading, ollamaOnline, send, stop, clearChat, checkStatus } = useChat()
 const { fetchModels } = useModels()
+
 const showSettings = ref(false)
+const showSidebar  = ref(false)
 let interval
 
 onMounted(async () => {
@@ -27,12 +29,37 @@ onUnmounted(() => clearInterval(interval))
 
 <template>
   <div class="flex h-screen overflow-hidden" style="background:#09090B">
-    <Sidebar @clear-chat="clearChat" @toggle-settings="showSettings = !showSettings" />
 
-    <main class="ml-[280px] flex-1 flex flex-col relative overflow-hidden">
+    <!-- Mobile backdrop -->
+    <Transition name="fade">
+      <div
+        v-if="showSidebar"
+        class="fixed inset-0 bg-black/60 z-30 md:hidden backdrop-blur-sm"
+        @click="showSidebar = false"
+      />
+    </Transition>
+
+    <!-- Sidebar: fixed drawer on mobile, static on desktop -->
+    <div
+      class="fixed top-0 left-0 h-full z-40 transition-transform duration-300 md:translate-x-0 md:relative md:z-auto md:flex-shrink-0"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <Sidebar
+        @clear-chat="() => { clearChat(); showSidebar = false }"
+        @toggle-settings="showSettings = !showSettings"
+        @close="showSidebar = false"
+      />
+    </div>
+
+    <!-- Main -->
+    <main class="flex-1 flex flex-col relative overflow-hidden min-w-0">
       <ShaderCanvas class="absolute inset-0 pointer-events-none z-0" />
       <div class="relative z-10 flex flex-col h-full">
-        <TopBar :ollama-online="ollamaOnline" @toggle-settings="showSettings = !showSettings" />
+        <TopBar
+          :ollama-online="ollamaOnline"
+          @toggle-settings="showSettings = !showSettings"
+          @toggle-sidebar="showSidebar = !showSidebar"
+        />
         <ChatViewport :messages="messages" :loading="loading" @suggest="send" />
         <InputArea :loading="loading" @send="send" @stop="stop" />
       </div>

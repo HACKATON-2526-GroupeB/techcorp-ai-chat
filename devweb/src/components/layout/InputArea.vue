@@ -4,7 +4,7 @@ import { useSpeech } from '../../composables/useSpeech'
 
 const props = defineProps({ loading: Boolean })
 const emit  = defineEmits(['send', 'stop'])
-const input = ref('')
+const input    = ref('')
 const textarea = ref(null)
 
 const { listening, toggle: toggleSpeech, supported: speechSupported } = useSpeech({
@@ -15,24 +15,23 @@ function handleSend() {
   if (!input.value.trim() || props.loading) return
   emit('send', input.value.trim())
   input.value = ''
-  if (textarea.value) { textarea.value.style.height = 'auto' }
+  if (textarea.value) textarea.value.style.height = 'auto'
 }
 function handleKeydown(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
 }
 function autoResize(e) {
   e.target.style.height = 'auto'
-  e.target.style.height = Math.min(e.target.scrollHeight, 160) + 'px'
+  e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px'
 }
 </script>
 
 <template>
-  <div class="px-4 pb-4 pt-2 flex-shrink-0">
-    <!-- Main input container -->
-    <div class="rounded-2xl border border-white/10 overflow-hidden transition focus-within:border-[#7C5CFC]/40 focus-within:shadow-[0_0_0_1px_rgba(124,92,252,0.2)]" style="background:#181825">
-      <div class="flex items-end gap-2 px-4 py-3">
+  <div class="px-3 sm:px-4 pb-3 sm:pb-4 pt-2 flex-shrink-0">
+    <div class="rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden transition focus-within:border-[#7C5CFC]/40 focus-within:shadow-[0_0_0_1px_rgba(124,92,252,0.15)] max-w-3xl mx-auto" style="background:#181825">
+      <div class="flex items-end gap-2 px-3 sm:px-4 py-2.5 sm:py-3">
         <!-- Attachment -->
-        <button class="p-1.5 rounded-lg text-white/30 hover:text-white hover:bg-white/8 transition flex-shrink-0 mb-0.5" title="Joindre un fichier">
+        <button class="p-1.5 rounded-lg text-white/30 hover:text-white hover:bg-white/8 transition flex-shrink-0 mb-0.5" title="Joindre">
           <span class="material-symbols-outlined text-[20px]">attach_file</span>
         </button>
 
@@ -43,16 +42,16 @@ function autoResize(e) {
           rows="1"
           placeholder="Posez votre question financière..."
           class="flex-1 bg-transparent text-sm text-white placeholder-white/25 outline-none resize-none py-1 leading-relaxed"
-          style="max-height:160px"
+          style="max-height:140px"
           :disabled="loading"
           @keydown="handleKeydown"
           @input="autoResize"
         />
 
-        <!-- Voice -->
+        <!-- Voice (hidden on very small screens) -->
         <button
           v-if="speechSupported"
-          class="p-1.5 rounded-lg transition flex-shrink-0 mb-0.5"
+          class="hidden sm:flex p-1.5 rounded-lg transition flex-shrink-0 mb-0.5"
           :class="listening ? 'text-red-400 bg-red-900/20 animate-pulse' : 'text-white/30 hover:text-white hover:bg-white/8'"
           :disabled="loading"
           @click="toggleSpeech"
@@ -60,7 +59,7 @@ function autoResize(e) {
           <span class="material-symbols-outlined text-[20px]">{{ listening ? 'mic' : 'mic_none' }}</span>
         </button>
 
-        <!-- Send / Stop -->
+        <!-- Stop / Send -->
         <button
           v-if="loading"
           class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition"
@@ -81,8 +80,8 @@ function autoResize(e) {
         </button>
       </div>
 
-      <!-- Bottom bar -->
-      <div class="flex items-center gap-3 px-4 py-2 border-t border-white/5">
+      <!-- Bottom bar — hidden on very small screens to save space -->
+      <div class="hidden sm:flex items-center gap-3 px-4 py-2 border-t border-white/5">
         <button class="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition">
           <span class="material-symbols-outlined text-[14px]">attach_file</span>
           Joindre un fichier
@@ -93,7 +92,6 @@ function autoResize(e) {
         </button>
       </div>
     </div>
-
-    <p class="text-[10px] text-white/15 text-center mt-2">TechCorp AI peut faire des erreurs. Vérifiez les informations importantes.</p>
+    <p class="text-[10px] text-white/12 text-center mt-1.5 hidden sm:block">TechCorp AI peut faire des erreurs. Vérifiez les informations importantes.</p>
   </div>
 </template>
