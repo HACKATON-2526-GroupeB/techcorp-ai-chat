@@ -8,7 +8,7 @@ BACKEND = os.environ.get("BACKEND", "http://localhost:11434")
 PORT    = int(os.environ.get("PORT", "8443"))
 DOMAIN  = os.environ.get("DOMAIN", "4ride.online")
 SSL_DIR = os.path.join(os.path.dirname(__file__), "ssl")
-CERT    = os.path.join(SSL_DIR, "cert.pem")
+CERT    = os.path.join(SSL_DIR, "fullchain.pem")
 KEY     = os.path.join(SSL_DIR, "key.pem")
 
 SKIP_HEADERS = {'host', 'connection', 'transfer-encoding', 'keep-alive'}

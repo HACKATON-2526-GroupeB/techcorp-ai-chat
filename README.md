@@ -71,13 +71,24 @@ La bbox redirige ensuite le trafic vers ce serveur (`192.168.10.155`) via les r�
 
 ## SSL / HTTPS
 
-Le certificat SSL est **auto-signé** (généré avec OpenSSL au premier démarrage du proxy).
+Le certificat SSL est fourni par **Let's Encrypt** via [acme.sh](https://github.com/acmesh-official/acme.sh).
 
-- Fichiers : `scripts/ssl/cert.pem` et `scripts/ssl/key.pem`
-- Validité : 365 jours
+- Fichiers : `scripts/ssl/fullchain.pem` et `scripts/ssl/key.pem`
+- Autorité : Let's Encrypt (reconnu par tous les navigateurs, aucun avertissement)
+- Validité : 90 jours (renouvellement automatique via acme.sh)
 - CN : `4ride.online`
 
-> Les navigateurs afficheront un avertissement de sécurité car le certificat n'est pas signé par une autorité reconnue. Pour usage en production, remplacer par un certificat Let's Encrypt.
+**Obtenir / renouveler le certificat :**
+```bash
+# Première émission (nécessite port 80 → 8080 sur le routeur temporairement)
+~/bin/acme.sh --issue -d 4ride.online --standalone --httpport 8080 --server letsencrypt
+
+# Installer dans le proxy
+~/bin/acme.sh --install-cert -d 4ride.online \
+  --cert-file scripts/ssl/cert.pem \
+  --key-file scripts/ssl/key.pem \
+  --fullchain-file scripts/ssl/fullchain.pem
+```
 
 ---
 
