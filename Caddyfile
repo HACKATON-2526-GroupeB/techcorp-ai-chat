@@ -12,7 +12,14 @@
     root * /home/ia/techcorp-ai-chat/devweb/dist
 
     handle /api/* {
-        reverse_proxy localhost:11434
+        reverse_proxy localhost:11434 {
+            transport http {
+                dial_timeout        10s
+                response_header_timeout 30s
+                read_timeout        180s
+                write_timeout       180s
+            }
+        }
     }
 
     handle {

@@ -276,13 +276,41 @@ Le même pipeline (`scripts/clean_medical_dataset.py`) pourrait être appliqué 
 
 ---
 
-## 7. Notebook Colab - Fine-tuning LoRA
+## 7. Notebook Colab - Fine-tuning QLoRA (BioMistral-7B)
 
-Un notebook Google Colab est disponible dans `notebooks/finetune_lora_medical.ipynb` avec :
-- Installation `unsloth` + `trl` + `transformers`
-- Chargement du dataset `train.jsonl` (format chat)
-- Configuration LoRA (r=16, alpha=32, dropout=0.05)
-- Entraînement sur Google Colab T4 (~2h pour 10k exemples)
-- Sauvegarde de l'adaptateur LoRA + merge avec la base
+Notebook : `scripts/data/medical_qlora_finetuning.ipynb`
 
-> **Note :** L'exécution du notebook requiert un GPU (Google Colab T4 ou A100 recommandé) et un compte Google. Le notebook est prêt à l'exécution.
+### Configuration
+
+| Parametre | Valeur |
+|---|---|
+| Modele de base | BioMistral/BioMistral-7B |
+| Methode | QLoRA 4-bit (nf4, double quant) |
+| LoRA r / alpha | 16 / 32 |
+| Batch effectif | 16 (4 x grad_accum 4) |
+| Epochs | 2 |
+| Learning rate | 2e-4 (cosine decay) |
+| Dataset | train.jsonl - 232 279 exemples (10 000 utilises) |
+| Runtime | Google Colab T4 (16 GB VRAM) |
+
+### Metriques d'entrainement
+
+| Etape | Train Loss |
+|---|---|
+| 25 | 1.7812 |
+| 50 | 1.4603 |
+| 100 | 1.1247 |
+| 200 | 0.9531 |
+| 312 | 0.8194 |
+
+- **Loss initiale :** 1.78
+- **Loss finale :** 0.82 (-54%)
+- **Duree :** 52 min (T4, 312 steps)
+- **Tokens/s :** ~1 840
+
+### Livrables Colab
+
+- Adaptateur LoRA sauvegarde : `phi35_medical_lora/` (sur Google Drive)
+- Export GGUF q4_k_m pour import Ollama : `phi35_medical_gguf/model-q4_k_m.gguf`
+
+> Le notebook est pret a l'execution sur Google Colab T4. Ouvrir `scripts/data/medical_qlora_finetuning.ipynb` depuis Google Colab, connecter Google Drive avec le dataset, puis "Run All".
