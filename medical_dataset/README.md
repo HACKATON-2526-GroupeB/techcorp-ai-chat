@@ -76,11 +76,11 @@ Dans le domaine médical, l'utilisation de modèles de langage génériques comm
 
 ## Avertissements Importants
 
-⚠️ **Les modèles fine-tunés ne remplacent jamais l'expertise médicale humaine**
+ **Les modèles fine-tunés ne remplacent jamais l'expertise médicale humaine**
 
-⚠️ **Validation obligatoire par des professionnels de santé qualifiés**
+ **Validation obligatoire par des professionnels de santé qualifiés**
 
-⚠️ **Tests approfondis requis avant tout déploiement clinique**
+ **Tests approfondis requis avant tout déploiement clinique**
 
 ## Optimisation des Ressources : Quantization et Techniques Low-Power
 
@@ -94,9 +94,9 @@ Dans le domaine médical, l'utilisation de modèles de langage génériques comm
 - **Gradient Checkpointing** : Réduction mémoire de 50-80%
 - **DeepSpeed ZeRO** : Parallélisation efficace des paramètres
 - **Parameter-Efficient Fine-tuning** :
-  - **LoRA** : Adaptation de rang faible (99% réduction paramètres)
-  - **AdaLoRA** : LoRA adaptatif selon l'importance
-  - **Prefix Tuning** : Optimisation des prompts uniquement
+ - **LoRA** : Adaptation de rang faible (99% réduction paramètres)
+ - **AdaLoRA** : LoRA adaptatif selon l'importance
+ - **Prefix Tuning** : Optimisation des prompts uniquement
 
 ## Ressources et Outils
 

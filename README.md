@@ -1,6 +1,6 @@
 # TechCorp AI Chat
 
-Assistant IA financier spécialisé basé sur **Ollama + Phi-3.5-Financial**, déployé sans accès root sur Debian 13.  
+Assistant IA financier spécialisé basé sur **Ollama + Phi-3.5-Financial**, déployé sans accès root sur Debian 13. 
 Interface accessible sur **https://4ride.online**
 
 ---
@@ -28,27 +28,27 @@ Modèle : **`phi3-financial`**
 
 ```
 Internet
-    │
-    ▼
-4ride.online  ──DNS A──►  130.180.208.168  (IP publique bbox)
-                                │
-                    ┌───────────┴───────────┐
-                    │    Bbox (routeur)     │
-                    │  Port 443 → 8443      │
-                    │  Port 80  → 11434     │
-                    └───────────┬───────────┘
-                                │
-                                ▼
-                       192.168.10.155  (IA-SERVER, réseau local)
-                                │
-                    ┌───────────┴───────────┐
-                    │                       │
-                    ▼                       ▼
-             Port 8443                Port 11434
-          HTTPS Proxy (Python)       Ollama (HTTP)
-          scripts/https_proxy.py     phi3-financial
-                    │
-                    └──────► http://localhost:11434
+
+
+4ride.online DNS A 130.180.208.168 (IP publique bbox)
+
+
+ Bbox (routeur) 
+ Port 443 → 8443 
+ Port 80 → 11434 
+
+
+
+ 192.168.10.155 (IA-SERVER, réseau local)
+
+
+
+
+ Port 8443 Port 11434
+ HTTPS Proxy (Python) Ollama (HTTP)
+ scripts/https_proxy.py phi3-financial
+
+ http://localhost:11434
 ```
 
 ---
@@ -69,7 +69,7 @@ Internet
 Le domaine `4ride.online` pointe vers l'IP publique de la bbox via un **enregistrement DNS de type A** :
 
 ```
-4ride.online.    A    130.180.208.168
+4ride.online. A 130.180.208.168
 ```
 
 La bbox redirige ensuite le trafic vers ce serveur (`192.168.10.155`) via les règles de port forwarding.
@@ -94,9 +94,9 @@ Le certificat SSL est fourni par **Let's Encrypt** via [acme.sh](https://github.
 
 # Installer dans le proxy
 ~/bin/acme.sh --install-cert -d 4ride.online \
-  --cert-file scripts/ssl/cert.pem \
-  --key-file scripts/ssl/key.pem \
-  --fullchain-file scripts/ssl/fullchain.pem
+ --cert-file scripts/ssl/cert.pem \
+ --key-file scripts/ssl/key.pem \
+ --fullchain-file scripts/ssl/fullchain.pem
 ```
 
 ---
@@ -121,26 +121,26 @@ kill $(cat logs/https_proxy.pid)
 
 ---
 
-## API — Endpoints
+## API - Endpoints
 
 ### Générer une réponse
 
 ```bash
 curl -sk -X POST https://4ride.online/api/generate \
-  -H "Content-Type: application/json" \
-  -d '{"model":"phi3-financial","prompt":"What is EBITDA?","stream":false}'
+ -H "Content-Type: application/json" \
+ -d '{"model":"phi3-financial","prompt":"What is EBITDA?","stream":false}'
 ```
 
 ### Chat (multi-tours)
 
 ```bash
 curl -sk -X POST https://4ride.online/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "phi3-financial",
-    "messages": [{"role":"user","content":"Analyse ce bilan financier..."}],
-    "stream": false
-  }'
+ -H "Content-Type: application/json" \
+ -d '{
+ "model": "phi3-financial",
+ "messages": [{"role":"user","content":"Analyse ce bilan financier..."}],
+ "stream": false
+ }'
 ```
 
 ### Lister les modèles

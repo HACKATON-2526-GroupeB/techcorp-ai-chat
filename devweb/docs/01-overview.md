@@ -1,4 +1,4 @@
-# 01 — Contexte & stack
+# 01 - Contexte & stack
 
 ## Contexte du projet
 
@@ -11,7 +11,7 @@ Interface web de chat connectée à **Ollama** (serveur d'inférence local) pour
 - **CSS** : Tailwind CSS (config étendue → voir [03-design-system.md](03-design-system.md))
 - **Icônes** : Material Symbols Outlined (Google Fonts)
 - **Polices** : Geist (corps), JetBrains Mono (code)
-- **API** : Ollama REST — `http://localhost:11434`
+- **API** : Ollama REST - `http://localhost:11434`
 - **Pas de router** : single-page, une seule vue
 
 ## Commandes du projet
@@ -22,6 +22,6 @@ cd techcorp-chat
 npm install
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
-npm run dev       # dev server → http://localhost:5173
-npm run build     # build production → dist/
+npm run dev # dev server → http://localhost:5173
+npm run build # build production → dist/
 ```

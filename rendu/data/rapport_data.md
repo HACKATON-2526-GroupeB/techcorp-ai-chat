@@ -1,6 +1,6 @@
-# Rapport DATA — TechCorp AI Challenge
-**Filière :** DATA · **Date :** 2026-06-30  
-**Dataset source :** `ruslanmv/ai-medical-chatbot` (HuggingFace)  
+# Rapport DATA - TechCorp AI Challenge
+**Filière :** DATA · **Date :** 2026-06-30 
+**Dataset source :** `ruslanmv/ai-medical-chatbot` (HuggingFace) 
 **Pipeline :** `scripts/clean_medical_dataset.py` (reproductible, seed=42)
 
 ---
@@ -19,7 +19,7 @@ Dataset prêt pour fine-tuning LoRA, exporté en `train.jsonl` (232 279 exemples
 
 ## Anomalies détectées
 
-### ⚠️ Empoisonnement par duplication massive — anomalie principale
+### Empoisonnement par duplication massive - anomalie principale
 - **10 378 lignes en doublon exact**
 - 5 enregistrements clonés exactement **1 137 fois chacun**, 17 réponses présentes > 100 fois
 - Signature d'une **injection de doublons** par l'équipe précédente → aurait biaisé le fine-tuning vers sur-apprentissage de 5 réponses génériques
@@ -72,7 +72,7 @@ Dataset prêt pour fine-tuning LoRA, exporté en `train.jsonl` (232 279 exemples
 
 | Fichier | Contenu |
 |---|---|
-| `medical_dataset/medical_clean.parquet` | Dataset nettoyé — 244 504 lignes |
+| `medical_dataset/medical_clean.parquet` | Dataset nettoyé - 244 504 lignes |
 | `medical_dataset/train.jsonl` | 232 279 exemples format chat LoRA |
 | `medical_dataset/val.jsonl` | 12 225 exemples de validation |
 | `medical_dataset/removed_samples.parquet` | Lignes écartées + motif (audit) |
@@ -81,9 +81,9 @@ Dataset prêt pour fine-tuning LoRA, exporté en `train.jsonl` (232 279 exemples
 **Format de sortie (prêt LoRA) :**
 ```json
 {"messages":[
-  {"role":"system","content":"You are a helpful, careful medical assistant..."},
-  {"role":"user","content":"<question patient>"},
-  {"role":"assistant","content":"<réponse médecin>"}
+ {"role":"system","content":"You are a helpful, careful medical assistant..."},
+ {"role":"user","content":"<question patient>"},
+ {"role":"assistant","content":"<réponse médecin>"}
 ]}
 ```
 
@@ -91,5 +91,5 @@ Dataset prêt pour fine-tuning LoRA, exporté en `train.jsonl` (232 279 exemples
 
 ## Lien HuggingFace
 
-Le dataset source est disponible sur HuggingFace : `ruslanmv/ai-medical-chatbot`  
-Les fichiers LFS (parquet, jsonl) sont tracés dans `.gitattributes` — récupérable via `git lfs pull`.
+Le dataset source est disponible sur HuggingFace : `ruslanmv/ai-medical-chatbot` 
+Les fichiers LFS (parquet, jsonl) sont tracés dans `.gitattributes` - récupérable via `git lfs pull`.

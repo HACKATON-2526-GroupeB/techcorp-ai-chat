@@ -1,11 +1,11 @@
-# 04 — Composants : comportement attendu
+# 04 - Composants : comportement attendu
 
 ## `App.vue`
 
 Racine de l'application. Monte le layout et démarre les services au `onMounted` :
-1. `checkStatus()` — vérifie si Ollama est en ligne
-2. `fetchModels()` — récupère la liste des modèles disponibles
-3. `setInterval` toutes les 30s — re-vérifie le statut, re-fetch les modèles si en ligne
+1. `checkStatus()` - vérifie si Ollama est en ligne
+2. `fetchModels()` - récupère la liste des modèles disponibles
+3. `setInterval` toutes les 30s - re-vérifie le statut, re-fetch les modèles si en ligne
 
 ## `Sidebar.vue`
 
@@ -28,16 +28,16 @@ Racine de l'application. Monte le layout et démarre les services au `onMounted`
 - Gauche : "TechCorp" + dot statut Ollama (vert animé / rouge fixe).
 - Droite : bouton Settings + cloche notifications.
 - **Cloche** : badge pop animé au compteur, dropdown `slide-down` avec liste des erreurs système.
-  - Chaque erreur : icône colorée, label, détail, horodatage, bouton dismiss.
-  - Bouton "Tout effacer" si erreurs présentes.
-  - `TransitionGroup name="fade"` sur les items de la liste.
+ - Chaque erreur : icône colorée, label, détail, horodatage, bouton dismiss.
+ - Bouton "Tout effacer" si erreurs présentes.
+ - `TransitionGroup name="fade"` sur les items de la liste.
 - Pas d'avatar (supprimé).
 
 ## `ChatViewport.vue`
 
 - `flex-1`, `overflow-y-auto`, `pt-24 pb-32`, `max-w-[800px] mx-auto`.
 - **Empty state** : icône `auto_awesome` avec `animate-float` (flottement doux).
-- **Messages** : `TransitionGroup name="msg"` — chaque message slide-up + fade spring à l'apparition.
+- **Messages** : `TransitionGroup name="msg"` - chaque message slide-up + fade spring à l'apparition.
 - Scroll automatique vers le bas à chaque changement de contenu.
 
 ## `MessageUser.vue`
@@ -66,11 +66,11 @@ Racine de l'application. Monte le layout et démarre les services au `onMounted`
 - Slide-in depuis la droite, `w-[480px]`, avec backdrop overlay.
 - Transition `panel` (translateX + opacity).
 - **5 onglets** :
-  - **Connexion** : URL Ollama éditable, bouton Test (→ ok/error), bouton Sauvegarder.
-  - **Modèle** : slider température (0–2), slider maxTokens (256–8192).
-  - **Voix** : select langue de reconnaissance vocale, warning si Speech API non supportée.
-  - **Historique** : toggle autoSave, stats sessions, export JSON, bouton clear all.
-  - **À propos** : tableau stack (Vue 3, Vite, Tailwind, Ollama).
+ - **Connexion** : URL Ollama éditable, bouton Test (→ ok/error), bouton Sauvegarder.
+ - **Modèle** : slider température (0–2), slider maxTokens (256–8192).
+ - **Voix** : select langue de reconnaissance vocale, warning si Speech API non supportée.
+ - **Historique** : toggle autoSave, stats sessions, export JSON, bouton clear all.
+ - **À propos** : tableau stack (Vue 3, Vite, Tailwind, Ollama).
 
 ## `ShaderCanvas.vue`
 

@@ -1,6 +1,6 @@
-# Rapport IA — TechCorp AI Challenge
-**Filière :** IA · **Date :** 2026-06-30  
-**Modèle évalué :** `phi3-financial:latest`  
+# Rapport IA - TechCorp AI Challenge
+**Filière :** IA · **Date :** 2026-06-30 
+**Modèle évalué :** `phi3-financial:latest` 
 **Serveur :** http://localhost:11434 (Ollama v0.30.11)
 
 ---
@@ -15,10 +15,10 @@
 | Contexte | 4 096 tokens |
 | Tokens max par réponse | 1 024 |
 | Taille en mémoire | 2 075 MB |
-| Infrastructure | VM QEMU — 9 vCPUs, 31 GB RAM, CPU seul (pas de GPU) |
+| Infrastructure | VM QEMU - 9 vCPUs, 31 GB RAM, CPU seul (pas de GPU) |
 | Débit moyen | ~12–18 tokens/s |
 
-**Méthode de spécialisation :** System prompt engineering (Modelfile) — la base phi3.5 est conservée, un system prompt définit le domaine financier, la rigueur et les normes (IFRS, GAAP, MiFID II, Bâle III).
+**Méthode de spécialisation :** System prompt engineering (Modelfile) - la base phi3.5 est conservée, un system prompt définit le domaine financier, la rigueur et les normes (IFRS, GAAP, MiFID II, Bâle III).
 
 ---
 
@@ -27,15 +27,15 @@
 - **10 questions** couvrant les grands domaines financiers
 - Chaque test : appel direct à l'API Ollama (`/api/generate`, stream=false)
 - Critères d'évaluation : **Pertinence**, **Exactitude**, **Structure**, **Langue**
-- Échelle : ✅ Bon · ⚠️ Acceptable · ❌ Insuffisant
+- Échelle : Bon · Acceptable · Insuffisant
 
 ---
 
 ## 3. Tests et évaluations
 
-### Test 1 — EBITDA
-**Prompt :** Qu'est-ce que l'EBITDA et comment l'interpréter ?  
-**Temps :** 40,8 s · 300 tokens générés  
+### Test 1 - EBITDA
+**Prompt :** Qu'est-ce que l'EBITDA et comment l'interpréter ? 
+**Temps :** 40,8 s · 300 tokens générés 
 
 **Réponse (extrait) :**
 > L'EBITDA, qui signifie « Économies avant Intérêts, Taxes, Amortissements et Déplaiements », est un indicateur financier utilisé pour évaluer la performance opérationnelle d'une entreprise. Il mesure les revenus nets générés par l'entreprise sans tenir compte des éléments de financement ou fiscalité qui peuvent varier selon le contexte économique et légal dans lequel une société fonctionne.
@@ -46,16 +46,16 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Répond directement à la question |
-| Exactitude | ⚠️ | Définition approximative (traduction littérale incorrecte de l'acronyme) |
-| Structure | ✅ | Liste numérotée, titres en gras |
-| Langue | ✅ | Français correct et fluide |
+| Pertinence | | Répond directement à la question |
+| Exactitude | | Définition approximative (traduction littérale incorrecte de l'acronyme) |
+| Structure | | Liste numérotée, titres en gras |
+| Langue | | Français correct et fluide |
 
 ---
 
-### Test 2 — Actions vs Obligations
-**Prompt :** Explique-moi la différence entre une action et une obligation.  
-**Temps :** 39,5 s · 300 tokens  
+### Test 2 - Actions vs Obligations
+**Prompt :** Explique-moi la différence entre une action et une obligation. 
+**Temps :** 39,5 s · 300 tokens 
 
 **Réponse (extrait) :**
 > Une action représente un intérêt de propriété dans une société, tandis qu'une obligation est un instrument financier qui reflète le crédit d'un emprunteur (généralement l'État ou une entreprise) auprès des investisseurs.
@@ -65,16 +65,16 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Distinction claire et correcte |
-| Exactitude | ✅ | Concepts fondamentaux bien expliqués |
-| Structure | ✅ | Comparaison structurée |
-| Langue | ✅ | Terminologie financière adaptée |
+| Pertinence | | Distinction claire et correcte |
+| Exactitude | | Concepts fondamentaux bien expliqués |
+| Structure | | Comparaison structurée |
+| Langue | | Terminologie financière adaptée |
 
 ---
 
-### Test 3 — Risques Private Equity
-**Prompt :** Quels sont les principaux risques d'un investissement en private equity ?  
-**Temps :** 38,4 s · 300 tokens  
+### Test 3 - Risques Private Equity
+**Prompt :** Quels sont les principaux risques d'un investissement en private equity ? 
+**Temps :** 38,4 s · 300 tokens 
 
 **Réponse (extrait) :**
 > Les principales risques associés à un investissement dans le capital-investissement (Private Equity) comprennent :
@@ -85,16 +85,16 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Risques pertinents et bien ciblés |
-| Exactitude | ✅ | Illiquidité, horizon long, risque de performance : correct |
-| Structure | ✅ | Enumération claire |
-| Langue | ✅ | Bon niveau de langage financier |
+| Pertinence | | Risques pertinents et bien ciblés |
+| Exactitude | | Illiquidité, horizon long, risque de performance : correct |
+| Structure | | Enumération claire |
+| Langue | | Bon niveau de langage financier |
 
 ---
 
-### Test 4 — Ratio P/E
-**Prompt :** Qu'est-ce que le ratio Price-to-Earnings (P/E) ?  
-**Temps :** 38,9 s · 300 tokens  
+### Test 4 - Ratio P/E
+**Prompt :** Qu'est-ce que le ratio Price-to-Earnings (P/E) ? 
+**Temps :** 38,9 s · 300 tokens 
 
 **Réponse (extrait) :**
 > Le ratio de prix sur les bénéfices, communément appelé P/E, est un indicateur financier utilisé pour évaluer la valorisation d'une entreprise. Il mesure le rapport du cours actuel des actions (Price) au résultat net par action (Earnings).
@@ -106,14 +106,14 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Définition et calcul bien expliqués |
-| Exactitude | ✅ | Formule correcte |
-| Structure | ✅ | Etapes de calcul numérotées |
-| Langue | ✅ | Précis et clair |
+| Pertinence | | Définition et calcul bien expliqués |
+| Exactitude | | Formule correcte |
+| Structure | | Etapes de calcul numérotées |
+| Langue | | Précis et clair |
 
 ---
 
-### Test 5 — Émission d'obligations d'entreprise
+### Test 5 - Émission d'obligations d'entreprise
 **Prompt :** Comment fonctionne une émission d'obligations d'entreprise ?
 
 **Réponse (extrait) :**
@@ -127,14 +127,14 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Processus complet et réaliste |
-| Exactitude | ✅ | Étapes conformes à la pratique de marché |
-| Structure | ✅ | Séquence logique |
-| Langue | ✅ | Vocabulaire de marché correct |
+| Pertinence | | Processus complet et réaliste |
+| Exactitude | | Étapes conformes à la pratique de marché |
+| Structure | | Séquence logique |
+| Langue | | Vocabulaire de marché correct |
 
 ---
 
-### Test 6 — Capitalisation boursière vs Valeur d'Entreprise (EV)
+### Test 6 - Capitalisation boursière vs Valeur d'Entreprise (EV)
 **Prompt :** Quelle est la différence entre capitalisation boursière et valeur d'entreprise (EV) ?
 
 **Réponse (extrait) :**
@@ -143,14 +143,14 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Distinction correcte |
-| Exactitude | ✅ | Définition market cap exacte |
-| Structure | ✅ | Clair et progressif |
-| Langue | ✅ | Terminologie boursière précise |
+| Pertinence | | Distinction correcte |
+| Exactitude | | Définition market cap exacte |
+| Structure | | Clair et progressif |
+| Langue | | Terminologie boursière précise |
 
 ---
 
-### Test 7 — Diversification de portefeuille
+### Test 7 - Diversification de portefeuille
 **Prompt :** Explique le concept de diversification de portefeuille.
 
 **Réponse (extrait) :**
@@ -159,14 +159,14 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Concept bien cerné |
-| Exactitude | ✅ | Raisonnement risque/rendement correct |
-| Structure | ✅ | Introduction + développement logique |
-| Langue | ✅ | Fluide et professionnel |
+| Pertinence | | Concept bien cerné |
+| Exactitude | | Raisonnement risque/rendement correct |
+| Structure | | Introduction + développement logique |
+| Langue | | Fluide et professionnel |
 
 ---
 
-### Test 8 — Bilan comptable
+### Test 8 - Bilan comptable
 **Prompt :** Qu'est-ce qu'un bilan comptable ? Quels en sont les trois grandes parties ?
 
 **Réponse (extrait) :**
@@ -180,14 +180,14 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Répond exactement à la question |
-| Exactitude | ✅ | Les 3 parties sont correctes |
-| Structure | ✅ | Liste numérotée claire |
-| Langue | ✅ | Vocabulaire comptable approprié |
+| Pertinence | | Répond exactement à la question |
+| Exactitude | | Les 3 parties sont correctes |
+| Structure | | Liste numérotée claire |
+| Langue | | Vocabulaire comptable approprié |
 
 ---
 
-### Test 9 — Taux de Rendement Interne (TRI/IRR)
+### Test 9 - Taux de Rendement Interne (TRI/IRR)
 **Prompt :** Qu'est-ce que le taux de rendement interne (TRI/IRR) ?
 
 **Réponse (extrait) :**
@@ -198,14 +198,14 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Répond à la question |
-| Exactitude | ⚠️ | Définition approximative (le TRI est le taux qui annule la VAN, pas une moyenne pondérée) |
-| Structure | ✅ | Claire |
-| Langue | ✅ | Correct |
+| Pertinence | | Répond à la question |
+| Exactitude | | Définition approximative (le TRI est le taux qui annule la VAN, pas une moyenne pondérée) |
+| Structure | | Claire |
+| Langue | | Correct |
 
 ---
 
-### Test 10 — Analyse de solvabilité
+### Test 10 - Analyse de solvabilité
 **Prompt :** Comment analyser la solvabilité d'une entreprise ?
 
 **Réponse (extrait) :**
@@ -217,10 +217,10 @@
 **Évaluation :**
 | Critère | Note | Commentaire |
 |---|---|---|
-| Pertinence | ✅ | Approche structurée et professionnelle |
-| Exactitude | ✅ | Ratios et méthodes corrects |
-| Structure | ✅ | Approche méthodique numérotée |
-| Langue | ✅ | Niveau professionnel |
+| Pertinence | | Approche structurée et professionnelle |
+| Exactitude | | Ratios et méthodes corrects |
+| Structure | | Approche méthodique numérotée |
+| Langue | | Niveau professionnel |
 
 ---
 
@@ -228,32 +228,32 @@
 
 | Test | Sujet | Pertinence | Exactitude | Structure | Langue | Global |
 |---|---|---|---|---|---|---|
-| 1 | EBITDA | ✅ | ⚠️ | ✅ | ✅ | ⚠️ |
-| 2 | Actions vs Obligations | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 3 | Risques Private Equity | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 4 | Ratio P/E | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 5 | Émission obligations | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 6 | Cap. boursière vs EV | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 7 | Diversification | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 8 | Bilan comptable | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 9 | TRI / IRR | ✅ | ⚠️ | ✅ | ✅ | ⚠️ |
-| 10 | Solvabilité | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 1 | EBITDA | | | | | |
+| 2 | Actions vs Obligations | | | | | |
+| 3 | Risques Private Equity | | | | | |
+| 4 | Ratio P/E | | | | | |
+| 5 | Émission obligations | | | | | |
+| 6 | Cap. boursière vs EV | | | | | |
+| 7 | Diversification | | | | | |
+| 8 | Bilan comptable | | | | | |
+| 9 | TRI / IRR | | | | | |
+| 10 | Solvabilité | | | | | |
 
-**Score global : 8/10 ✅ · 2/10 ⚠️ · 0/10 ❌**
+**Score global : 8/10 · 2/10 · 0/10 **
 
 ---
 
 ## 5. Observations générales
 
 ### Points forts
-- Réponses **structurées et détaillées** — listes numérotées, titres en gras
+- Réponses **structurées et détaillées** - listes numérotées, titres en gras
 - **Bilingue natif** : répond en français ou en anglais selon la langue du prompt
 - Maîtrise du vocabulaire financier (IFRS, EPS, coupon, prospectus, PE, LBO...)
 - Temps de réponse **cohérent** : 38–42 s par réponse sur CPU (300 tokens)
 
 ### Limites observées
 - Traduction littérale d'acronymes anglophones (Test 1 : "Déplaiements" pour Amortization)
-- Générations tronquées à 300 tokens — les réponses complètes requièrent num_predict > 512
+- Générations tronquées à 300 tokens - les réponses complètes requièrent num_predict > 512
 - Performances CPU limitées : ~12–18 tokens/s (vs ~80 tokens/s sur GPU)
 
 ### Recommandations
@@ -276,7 +276,7 @@ Le même pipeline (`scripts/clean_medical_dataset.py`) pourrait être appliqué 
 
 ---
 
-## 7. Notebook Colab — Fine-tuning LoRA
+## 7. Notebook Colab - Fine-tuning LoRA
 
 Un notebook Google Colab est disponible dans `notebooks/finetune_lora_medical.ipynb` avec :
 - Installation `unsloth` + `trl` + `transformers`

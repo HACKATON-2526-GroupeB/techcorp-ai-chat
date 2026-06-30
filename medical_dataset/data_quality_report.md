@@ -1,6 +1,6 @@
-# Rapport de Qualité des Données — Dataset Médical
+# Rapport de Qualité des Données - Dataset Médical
 
-**Projet** TechCorp — Challenge IA · **Rôle** DATA · **Date** 2026-06-30
+**Projet** TechCorp - Challenge IA · **Rôle** DATA · **Date** 2026-06-30
 **Source** `dialogues.parquet` (dataset `ruslanmv/ai-medical-chatbot`)
 **Pipeline** `scripts/clean_medical_dataset.py` (reproductible, seed=42)
 
@@ -34,18 +34,18 @@ Aucune valeur manquante. Problèmes détectés ci-dessous.
 
 ## 3. Anomalies détectées (contexte « données compromises »)
 
-### 3.1 ⚠️ Empoisonnement par duplication massive — **anomalie principale**
+### 3.1 Empoisonnement par duplication massive - **anomalie principale**
 - **10 378 lignes en doublon exact**.
 - Concentration anormale : **5 enregistrements clonés exactement 1 137 fois chacun**,
-  17 réponses présentes > 100 fois (10 772 lignes au total).
+ 17 réponses présentes > 100 fois (10 772 lignes au total).
 - Une duplication aussi régulière et identique n'est pas naturelle dans un corpus
-  de conversations réelles → signature d'une **injection de doublons** par l'équipe
-  précédente, qui aurait biaisé le fine-tuning (sur-apprentissage de ces 5 réponses).
+ de conversations réelles → signature d'une **injection de doublons** par l'équipe
+ précédente, qui aurait biaisé le fine-tuning (sur-apprentissage de ces 5 réponses).
 - **Traitement** : déduplication exacte + déduplication `Patient`+`Doctor`.
 
 ### 3.2 Réponses tronquées / promotionnelles
 - **20 990 réponses** se terminent par un appât de référence tronqué du type
-  *« …consult a sexologist online --> »*. Bruit non médical, nuisible à l'apprentissage.
+ *« …consult a sexologist online --> »*. Bruit non médical, nuisible à l'apprentissage.
 - **Traitement** : suppression de la queue `consult … online -->` et des flèches `-->`.
 
 ### 3.3 Marqueurs de pseudonymisation
@@ -53,7 +53,7 @@ Aucune valeur manquante. Problèmes détectés ci-dessous.
 - **Traitement** : suppression du marqueur.
 
 ### 3.4 Artefacts d'encodage / mise en forme
-- `\xa0` (espace insécable) : 10 876 · `​`/`﻿` (zero-width) : 112 · balises HTML : 7.
+- `\xa0` (espace insécable) : 10 876 · `​`/`` (zero-width) : 112 · balises HTML : 7.
 - Espaces multiples : 85 573 lignes.
 - **Traitement** : normalisation Unicode **NFKC**, strip HTML, compression des espaces.
 
@@ -82,7 +82,7 @@ Toutes les lignes écartées sont conservées avec leur motif dans
 
 ---
 
-## 5. Distribution des longueurs (caractères) — avant → après
+## 5. Distribution des longueurs (caractères) - avant → après
 
 | Colonne | moy. brut | moy. clean | médiane clean | max clean |
 |---|---:|---:|---:|---:|
@@ -97,9 +97,9 @@ Le `max` de Patient passe de 17 735 → 5 969 et Doctor de 11 385 → 5 581
 
 ## 6. Limites connues (résiduel acceptable)
 - ~30 réponses contiennent encore `-->` et ~23 le mot *attachment* **en milieu de phrase**
-  (hors motif de fin) — < 0,02 % du corpus, impact négligeable.
+ (hors motif de fin) - < 0,02 % du corpus, impact négligeable.
 - Le dataset reflète la qualité variable de réponses humaines réelles ; ce modèle
-  reste **expérimental, non destiné à la production** (cf. briefing).
+ reste **expérimental, non destiné à la production** (cf. briefing).
 
 ---
 
@@ -117,8 +117,8 @@ Le `max` de Patient passe de 17 735 → 5 969 et Doctor de 11 385 → 5 581
 **Format chat** (prêt pour l'équipe IA / LoRA) :
 ```json
 {"messages":[
-  {"role":"system","content":"You are a helpful, careful medical assistant. ..."},
-  {"role":"user","content":"<question patient>"},
-  {"role":"assistant","content":"<réponse médecin>"}
+ {"role":"system","content":"You are a helpful, careful medical assistant. ..."},
+ {"role":"user","content":"<question patient>"},
+ {"role":"assistant","content":"<réponse médecin>"}
 ]}
 ```

@@ -1,15 +1,15 @@
-# TechCorp AI Chat — Document de rendu
+# TechCorp AI Chat - Document de rendu
 
-**Projet** : Interface web de chat IA connectée à Ollama  
-**Stack** : Vue 3 · Vite · Tailwind CSS · WebGL · Web Speech API  
-**Auteur** : Rezig Rachid  
+**Projet** : Interface web de chat IA connectée à Ollama 
+**Stack** : Vue 3 · Vite · Tailwind CSS · WebGL · Web Speech API 
+**Auteur** : Rezig Rachid 
 **Date** : Juin 2026
 
 ---
 
 ## 1. Présentation du projet
 
-TechCorp AI Chat est une interface web de conversation avec des modèles de langage fonctionnant localement via **Ollama**. L'application permet de discuter avec n'importe quel modèle LLM installé (phi3.5, llama3, mistral, etc.) sans aucun backend cloud — tout reste en local.
+TechCorp AI Chat est une interface web de conversation avec des modèles de langage fonctionnant localement via **Ollama**. L'application permet de discuter avec n'importe quel modèle LLM installé (phi3.5, llama3, mistral, etc.) sans aucun backend cloud - tout reste en local.
 
 Le design s'inspire des standards des interfaces IA modernes (dark theme, glassmorphism, animations fluides) et vise une expérience professionnelle comparable à Claude ou ChatGPT, mais entièrement offline.
 
@@ -89,7 +89,7 @@ Panel latéral avec 5 onglets :
 ### Stack
 | Couche | Technologie |
 |--------|-------------|
-| Framework | Vue 3 — Composition API exclusivement (`<script setup>`) |
+| Framework | Vue 3 - Composition API exclusivement (`<script setup>`) |
 | Build | Vite (bundle runtime-only Vue, pas de compilateur à l'exécution) |
 | CSS | Tailwind CSS v3 avec design system étendu |
 | Icônes | Material Symbols Outlined (Google Fonts, variable font) |
@@ -104,11 +104,11 @@ Pas de Pinia ni Vuex. L'état partagé repose sur le **pattern singleton module-
 
 ```js
 // Les refs sont déclarées HORS de la fonction exportée
-const messages = ref([])   // → module-level, instancié une seule fois
-const loading  = ref(false)
+const messages = ref([]) // → module-level, instancié une seule fois
+const loading = ref(false)
 
 export function useChat() {
-  return { messages, loading, send }  // tous les appelants partagent la même ref
+ return { messages, loading, send } // tous les appelants partagent la même ref
 }
 ```
 
@@ -131,7 +131,7 @@ Avantages : zéro dépendance, réactivité native Vue, HMR compatible.
 
 ### Streaming Ollama
 ```
-POST /api/chat  { model, messages, stream: true, options: { temperature, num_predict } }
+POST /api/chat { model, messages, stream: true, options: { temperature, num_predict } }
 ↓
 Réponse : flux NDJSON
 ↓
@@ -146,48 +146,48 @@ yield chunk → useChat accumule dans messages[last].content
 
 ```
 TechCorp-Web/
-├── src/
-│   ├── App.vue
-│   ├── main.js
-│   ├── assets/main.css
-│   ├── components/
-│   │   ├── chat/
-│   │   │   ├── ChatViewport.vue
-│   │   │   ├── MessageAI.vue
-│   │   │   └── MessageUser.vue
-│   │   ├── layout/
-│   │   │   ├── InputArea.vue
-│   │   │   ├── Sidebar.vue
-│   │   │   ├── SidebarSection.vue
-│   │   │   └── TopBar.vue
-│   │   ├── settings/
-│   │   │   └── SettingsPanel.vue
-│   │   └── ui/
-│   │       └── ShaderCanvas.vue
-│   ├── composables/
-│   │   ├── useChat.js
-│   │   ├── useHistory.js
-│   │   ├── useModels.js
-│   │   ├── useSettings.js
-│   │   └── useSpeech.js
-│   └── services/
-│       ├── errorService.js
-│       └── ollama.js
-├── docs/
-│   ├── index.md
-│   ├── 01-overview.md
-│   ├── 02-architecture.md
-│   ├── 03-design-system.md
-│   ├── 04-components.md
-│   ├── 05-api-ollama.md
-│   ├── 06-shaders.md
-│   ├── 07-conventions.md
-│   └── 08-rendu.md          ← ce fichier
-├── public/
-├── index.html
-├── tailwind.config.js
-├── vite.config.js
-└── package.json
+ src/
+ App.vue
+ main.js
+ assets/main.css
+ components/
+ chat/
+ ChatViewport.vue
+ MessageAI.vue
+ MessageUser.vue
+ layout/
+ InputArea.vue
+ Sidebar.vue
+ SidebarSection.vue
+ TopBar.vue
+ settings/
+ SettingsPanel.vue
+ ui/
+ ShaderCanvas.vue
+ composables/
+ useChat.js
+ useHistory.js
+ useModels.js
+ useSettings.js
+ useSpeech.js
+ services/
+ errorService.js
+ ollama.js
+ docs/
+ index.md
+ 01-overview.md
+ 02-architecture.md
+ 03-design-system.md
+ 04-components.md
+ 05-api-ollama.md
+ 06-shaders.md
+ 07-conventions.md
+ 08-rendu.md ← ce fichier
+ public/
+ index.html
+ tailwind.config.js
+ vite.config.js
+ package.json
 ```
 
 ---
@@ -195,7 +195,7 @@ TechCorp-Web/
 ## 5. Points techniques notables
 
 ### Vite runtime-only bundle
-Vite compile les SFC (`.vue`) au moment du build. Le bundle Vue inclus est **runtime-only** — il n'y a pas de compilateur de templates à l'exécution. Toute tentative d'utiliser `template: '...'` string dans `defineComponent()` échouera silencieusement (la vue ne rend rien). Tous les composants doivent être des `.vue` SFC.
+Vite compile les SFC (`.vue`) au moment du build. Le bundle Vue inclus est **runtime-only** - il n'y a pas de compilateur de templates à l'exécution. Toute tentative d'utiliser `template: '...'` string dans `defineComponent()` échouera silencieusement (la vue ne rend rien). Tous les composants doivent être des `.vue` SFC.
 
 ### TransitionGroup et clé stable
 Les messages dans `ChatViewport` utilisent `TransitionGroup name="msg"`. Chaque message a une clé stable (`msg.id ?? i`) pour que Vue distingue les éléments et déclenche les transitions correctement même pendant le streaming (où le contenu change mais l'élément est le même).
@@ -237,10 +237,10 @@ OLLAMA_ORIGINS="http://localhost:5173" ollama serve
 
 ## 7. Choix de conception
 
-**Pourquoi pas de Pinia ?** — Pour un projet de cette taille, le pattern singleton module-level est suffisant et élimine une dépendance. L'état réactif est tout aussi partageable sans store.
+**Pourquoi pas de Pinia ?** - Pour un projet de cette taille, le pattern singleton module-level est suffisant et élimine une dépendance. L'état réactif est tout aussi partageable sans store.
 
-**Pourquoi pas de router ?** — Application single-page, une seule vue. Ajouter Vue Router serait du surengineering.
+**Pourquoi pas de router ?** - Application single-page, une seule vue. Ajouter Vue Router serait du surengineering.
 
-**Pourquoi fetch natif ?** — Axios apporterait ~40kb pour des fonctionnalités non nécessaires ici. Le streaming NDJSON requiert l'API `ReadableStream` de toute façon, qu'Axios ne supporte pas nativement.
+**Pourquoi fetch natif ?** - Axios apporterait ~40kb pour des fonctionnalités non nécessaires ici. Le streaming NDJSON requiert l'API `ReadableStream` de toute façon, qu'Axios ne supporte pas nativement.
 
-**Pourquoi le model picker dans InputArea et pas en TopBar ?** — Ergonomie : l'utilisateur change de modèle juste avant d'envoyer un message. Avoir le sélecteur au même endroit que l'input réduit les aller-retours yeux/souris.
+**Pourquoi le model picker dans InputArea et pas en TopBar ?** - Ergonomie : l'utilisateur change de modèle juste avant d'envoyer un message. Avoir le sélecteur au même endroit que l'input réduit les aller-retours yeux/souris.

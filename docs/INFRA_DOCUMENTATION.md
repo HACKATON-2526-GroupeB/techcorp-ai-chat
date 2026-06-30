@@ -1,9 +1,9 @@
-# Documentation Technique — Déploiement Infrastructure
+# Documentation Technique - Déploiement Infrastructure
 ## TechCorp Industries | Challenge IA 7h | Rôle : INFRA
 
 ---
 
-## 1. Choix Technique — Justification
+## 1. Choix Technique - Justification
 
 ### Serveur d'inférence retenu : **Ollama**
 
@@ -12,49 +12,49 @@
 | Temps de mise en service | ~5 min | ~45 min | ~30 min |
 | Complexité configuration | Faible | Élevée (ONNX/TRT) | Moyenne |
 | Gestion des modèles | Intégrée (pull/run) | Manuelle | Manuelle |
-| API REST native | ✅ `/api/generate`, `/api/chat` | ✅ (HTTP/gRPC) | ✅ (à implémenter) |
-| Compatibilité OpenAI API | ✅ `/v1/chat/completions` | ⚠️ Partielle | Dépend |
-| Support Phi-3.5 | ✅ Natif (`phi3.5`) | ⚠️ Conversion nécessaire | ✅ via HuggingFace |
-| Quantization intégrée | ✅ (4-bit Q4_K_M par défaut) | ✅ (TensorRT INT8/FP16) | ✅ via bitsandbytes |
-| Accessible en réseau local | ✅ `OLLAMA_HOST=0.0.0.0` | ✅ | ✅ |
+| API REST native | `/api/generate`, `/api/chat` | (HTTP/gRPC) | (à implémenter) |
+| Compatibilité OpenAI API | `/v1/chat/completions` | Partielle | Dépend |
+| Support Phi-3.5 | Natif (`phi3.5`) | Conversion nécessaire | via HuggingFace |
+| Quantization intégrée | (4-bit Q4_K_M par défaut) | (TensorRT INT8/FP16) | via bitsandbytes |
+| Accessible en réseau local | `OLLAMA_HOST=0.0.0.0` | | |
 
-**Décision** : Ollama est retenu pour sa rapidité de déploiement, sa gestion native des modèles quantisés, et son API REST immédiatement consommable par l'équipe DEV WEB — critique dans le contexte du challenge 7h.
+**Décision** : Ollama est retenu pour sa rapidité de déploiement, sa gestion native des modèles quantisés, et son API REST immédiatement consommable par l'équipe DEV WEB - critique dans le contexte du challenge 7h.
 
-### Décision de sécurité — modèle de base, pas le checkpoint hérité
+### Décision de sécurité - modèle de base, pas le checkpoint hérité
 
 INFRA déploie le modèle de base `phi3.5` (vanilla) avec un system prompt spécialisé domaine financier, plutôt que le checkpoint fine-tuné hérité de l'équipe précédente. Ce choix est délibéré et lié à l'audit de sécurité en cours mené par l'équipe CYBER.
 
 > **INFRA deploys the base `phi3.5` model with a domain-specific system prompt rather than the compromised fine-tuned checkpoint inherited from the previous team, pending CYBER's audit clearance of `finance_dataset_final.json`.**
 
-Tant que CYBER n'a pas confirmé que `datasets/finance_dataset_final.json` est exempt de backdoor (trigger, persistance dans le dataset), aucun fine-tuning ou checkpoint dérivé de ce dataset ne sera chargé sur le serveur Ollama de production. Le profil `phi3-financial` actuellement déployé n'a jamais été entraîné sur ce dataset — il s'agit uniquement du modèle de base `phi3.5` enrichi d'un system prompt, donc non affecté par la backdoor identifiée par CYBER.
+Tant que CYBER n'a pas confirmé que `datasets/finance_dataset_final.json` est exempt de backdoor (trigger, persistance dans le dataset), aucun fine-tuning ou checkpoint dérivé de ce dataset ne sera chargé sur le serveur Ollama de production. Le profil `phi3-financial` actuellement déployé n'a jamais été entraîné sur ce dataset - il s'agit uniquement du modèle de base `phi3.5` enrichi d'un system prompt, donc non affecté par la backdoor identifiée par CYBER.
 
 ---
 
 ## 2. Architecture Déployée
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      Machine INFRA                              │
-│                                                                 │
-│   ┌──────────────┐     ┌────────────────────────────────────┐  │
-│   │   Ollama     │────▶│  Phi-3.5-Financial (phi3-financial) │  │
-│   │   Service    │     │  Base: microsoft/phi3.5             │  │
-│   │   :11434     │     │  Quantization: Q4_K_M (4-bit)      │  │
-│   └──────┬───────┘     │  Context: 4096 tokens              │  │
-│          │              └────────────────────────────────────┘  │
-│          │                                                       │
-│    Endpoints REST :                                             │
-│    POST /api/generate      (génération simple)                  │
-│    POST /api/chat          (format messages)                    │
-│    GET  /api/tags          (liste des modèles)                  │
-│    POST /v1/chat/completions (compatible OpenAI SDK)            │
-└──────────┬──────────────────────────────────────────────────────┘
-           │ HTTP — Réseau local
-    ┌──────┴───────────────────────────┐
-    │         Équipe DEV WEB           │
-    │   Interface Chat → API Ollama    │
-    │   http://<INFRA_IP>:11434        │
-    └──────────────────────────────────┘
+
+ Machine INFRA 
+
+
+ Ollama Phi-3.5-Financial (phi3-financial) 
+ Service Base: microsoft/phi3.5 
+ :11434 Quantization: Q4_K_M (4-bit) 
+ Context: 4096 tokens 
+
+
+ Endpoints REST : 
+ POST /api/generate (génération simple) 
+ POST /api/chat (format messages) 
+ GET /api/tags (liste des modèles) 
+ POST /v1/chat/completions (compatible OpenAI SDK) 
+
+ HTTP - Réseau local
+
+ Équipe DEV WEB 
+ Interface Chat → API Ollama 
+ http://<INFRA_IP>:11434 
+
 ```
 
 ---
@@ -139,9 +139,9 @@ Le modèle `phi3-financial` est un profil personnalisé basé sur `phi3.5` avec 
 
 ---
 
-## 6. API REST — Guide pour l'équipe DEV WEB
+## 6. API REST - Guide pour l'équipe DEV WEB
 
-### 6.1 Endpoint principal — Génération
+### 6.1 Endpoint principal - Génération
 
 ```
 POST http://<INFRA_IP>:11434/api/generate
@@ -150,27 +150,27 @@ Content-Type: application/json
 
 ```json
 {
-  "model": "phi3-financial",
-  "prompt": "Analyse the following income statement: Revenue 5M€, COGS 3M€, OPEX 1M€. What is the EBITDA?",
-  "stream": false,
-  "options": {
-    "temperature": 0.2,
-    "num_predict": 512
-  }
+ "model": "phi3-financial",
+ "prompt": "Analyse the following income statement: Revenue 5M€, COGS 3M€, OPEX 1M€. What is the EBITDA?",
+ "stream": false,
+ "options": {
+ "temperature": 0.2,
+ "num_predict": 512
+ }
 }
 ```
 
 **Réponse** :
 ```json
 {
-  "model": "phi3-financial",
-  "response": "Based on the provided income statement:\n- Revenue: 5,000,000€\n- COGS: 3,000,000€\n- Gross Profit: 2,000,000€\n- OPEX: 1,000,000€\n- EBITDA: 1,000,000€ (20% margin)\n...",
-  "done": true,
-  "total_duration": 4521000000
+ "model": "phi3-financial",
+ "response": "Based on the provided income statement:\n- Revenue: 5,000,000€\n- COGS: 3,000,000€\n- Gross Profit: 2,000,000€\n- OPEX: 1,000,000€\n- EBITDA: 1,000,000€ (20% margin)\n...",
+ "done": true,
+ "total_duration": 4521000000
 }
 ```
 
-### 6.2 Endpoint Chat (format messages — recommandé pour le chatbot)
+### 6.2 Endpoint Chat (format messages - recommandé pour le chatbot)
 
 ```
 POST http://<INFRA_IP>:11434/api/chat
@@ -179,14 +179,14 @@ Content-Type: application/json
 
 ```json
 {
-  "model": "phi3-financial",
-  "stream": false,
-  "messages": [
-    {
-      "role": "user",
-      "content": "Explain the difference between EBITDA and free cash flow."
-    }
-  ]
+ "model": "phi3-financial",
+ "stream": false,
+ "messages": [
+ {
+ "role": "user",
+ "content": "Explain the difference between EBITDA and free cash flow."
+ }
+ ]
 }
 ```
 
@@ -200,24 +200,24 @@ Content-Type: application/json
 Compatible avec le SDK OpenAI en remplaçant `base_url` :
 ```javascript
 const client = new OpenAI({
-  baseURL: 'http://<INFRA_IP>:11434/v1',
-  apiKey: 'ollama'  // requis mais ignoré
+ baseURL: 'http://<INFRA_IP>:11434/v1',
+ apiKey: 'ollama' // requis mais ignoré
 });
 ```
 
 ### 6.4 Modes streaming
 
-Pour une interface chat en temps réel, utilisez `"stream": true` — Ollama retourne les tokens en flux Server-Sent Events (SSE) :
+Pour une interface chat en temps réel, utilisez `"stream": true` - Ollama retourne les tokens en flux Server-Sent Events (SSE) :
 
 ```javascript
 const response = await fetch('http://<INFRA_IP>:11434/api/chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    model: 'phi3-financial',
-    messages: [{ role: 'user', content: userMessage }],
-    stream: true
-  })
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ model: 'phi3-financial',
+ messages: [{ role: 'user', content: userMessage }],
+ stream: true
+ })
 });
 
 const reader = response.body.getReader();
@@ -244,12 +244,12 @@ tail -f ./logs/ollama_deploy.log
 
 ---
 
-## 8. Accès Réseau — Configuration Pare-feu
+## 8. Accès Réseau - Configuration Pare-feu
 
 Pour rendre le serveur accessible à l'équipe DEV WEB sur le réseau local :
 
 ```bash
-# Ubuntu/Debian — ouvrir le port 11434
+# Ubuntu/Debian - ouvrir le port 11434
 sudo ufw allow 11434/tcp
 sudo ufw reload
 
@@ -280,9 +280,9 @@ ollama run phi3-financial ""
 
 Pour éliminer la latence de chargement sur la première requête :
 ```bash
-# Keepalive infini — maintient le modèle en VRAM
+# Keepalive infini - maintient le modèle en VRAM
 curl -X POST http://localhost:11434/api/generate \
-  -d '{"model":"phi3-financial","keep_alive":-1}'
+ -d '{"model":"phi3-financial","keep_alive":-1}'
 ```
 
 ### 9.3 Paramètres d'inférence à la volée
@@ -290,21 +290,21 @@ curl -X POST http://localhost:11434/api/generate \
 L'équipe DEV WEB peut surcharger les paramètres par requête :
 ```json
 {
-  "model": "phi3-financial",
-  "prompt": "...",
-  "options": {
-    "temperature": 0.1,
-    "num_predict": 200
-  }
+ "model": "phi3-financial",
+ "prompt": "...",
+ "options": {
+ "temperature": 0.1,
+ "num_predict": 200
+ }
 }
 ```
 
 ### 9.4 Modèles alternatifs (si Phi-3.5 indisponible)
 
 ```bash
-ollama pull qwen2.5:3b    # Léger, multilingue, excellent
-ollama pull mistral       # 7B, polyvalent
-ollama pull tinyllama     # Ultra-léger, CPU only
+ollama pull qwen2.5:3b # Léger, multilingue, excellent
+ollama pull mistral # 7B, polyvalent
+ollama pull tinyllama # Ultra-léger, CPU only
 ```
 
 ---
@@ -326,20 +326,20 @@ ollama pull tinyllama     # Ultra-léger, CPU only
 
 ```
 techcorp-ai-chat/
-├── models/
-│   └── Modelfile.financial       # Profil Phi-3.5-Financial
-├── scripts/
-│   ├── deploy_infra.sh           # Déploiement complet
-│   ├── stop_infra.sh             # Arrêt propre
-│   └── validate_infra.sh         # Tests de validation
-├── logs/
-│   ├── ollama_deploy.log         # Logs serveur (généré au runtime)
-│   └── ollama.pid                # PID du processus (généré au runtime)
-└── docs/
-    └── INFRA_DOCUMENTATION.md    # Ce document
+ models/
+ Modelfile.financial # Profil Phi-3.5-Financial
+ scripts/
+ deploy_infra.sh # Déploiement complet
+ stop_infra.sh # Arrêt propre
+ validate_infra.sh # Tests de validation
+ logs/
+ ollama_deploy.log # Logs serveur (généré au runtime)
+ ollama.pid # PID du processus (généré au runtime)
+ docs/
+ INFRA_DOCUMENTATION.md # Ce document
 ```
 
 ---
 
-*Document produit par l'équipe INFRA — TechCorp Industries*  
+*Document produit par l'équipe INFRA - TechCorp Industries* 
 *Challenge IA 7h | Date : 2026-06-29*

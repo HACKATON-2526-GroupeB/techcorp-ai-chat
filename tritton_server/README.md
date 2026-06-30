@@ -1,1 +1,1 @@
-Not used — Ollama selected as inference server. See docs/INFRA_DOCUMENTATION.md for justification.
+Not used - Ollama selected as inference server. See docs/INFRA_DOCUMENTATION.md for justification.

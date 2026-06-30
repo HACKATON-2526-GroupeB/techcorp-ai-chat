@@ -1,6 +1,6 @@
-# Rapport DEV WEB — TechCorp AI Challenge
-**Filière :** DEV WEB · **Date :** 2026-06-30  
-**URL publique :** https://4ride.online  
+# Rapport DEV WEB - TechCorp AI Challenge
+**Filière :** DEV WEB · **Date :** 2026-06-30 
+**URL publique :** https://4ride.online 
 **Repo :** github.com/HACKATON-2526-GroupeB/techcorp-ai-chat
 
 ---
@@ -13,8 +13,8 @@
 | Build tool | Vite | 6.4 |
 | CSS | Tailwind CSS + @tailwindcss/typography | 3.4 |
 | Markdown | marked.js | 15.x |
-| Icônes | Material Symbols (Google Fonts CDN) | — |
-| Fonts | Geist / Inter (Google Fonts CDN) | — |
+| Icônes | Material Symbols (Google Fonts CDN) | - |
+| Fonts | Geist / Inter (Google Fonts CDN) | - |
 | Serveur statique | Caddy v2.9.1 (sert `devweb/dist/`) | 2.9.1 |
 
 ---
@@ -22,26 +22,26 @@
 ## 2. Architecture des composants
 
 ```
-App.vue                          ← racine : état global, routing entre vues
-├── components/layout/
-│   ├── Sidebar.vue              ← historique conversations, nav, profil
-│   ├── TopBar.vue               ← logo, sélecteur modèle, thème, paramètres
-│   └── InputArea.vue            ← textarea auto-resize, voix, stop, envoi
-├── components/chat/
-│   ├── ChatViewport.vue         ← welcome screen + fil de messages
-│   ├── MessageUser.vue          ← bulle utilisateur (violet translucide)
-│   └── MessageAI.vue            ← réponse IA : markdown, copier, timestamp
-├── components/settings/
-│   └── SettingsPanel.vue        ← panel latéral : modèle, température, tokens
-├── components/ui/
-│   └── ShaderCanvas.vue         ← fond animé CSS (blobs radial-gradient)
-└── composables/
-    ├── useChat.js               ← logique principale : send, stop, streaming
-    ├── useModels.js             ← fetch /api/tags → liste des modèles
-    ├── useSettings.js           ← URL Ollama, température, langue vocale
-    ├── useSpeech.js             ← Web Speech API (reconnaissance vocale)
-    ├── useConversations.js      ← historique localStorage multi-conversations
-    └── useTheme.js              ← toggle dark/light mode
+App.vue ← racine : état global, routing entre vues
+ components/layout/
+ Sidebar.vue ← historique conversations, nav, profil
+ TopBar.vue ← logo, sélecteur modèle, thème, paramètres
+ InputArea.vue ← textarea auto-resize, voix, stop, envoi
+ components/chat/
+ ChatViewport.vue ← welcome screen + fil de messages
+ MessageUser.vue ← bulle utilisateur (violet translucide)
+ MessageAI.vue ← réponse IA : markdown, copier, timestamp
+ components/settings/
+ SettingsPanel.vue ← panel latéral : modèle, température, tokens
+ components/ui/
+ ShaderCanvas.vue ← fond animé CSS (blobs radial-gradient)
+ composables/
+ useChat.js ← logique principale : send, stop, streaming
+ useModels.js ← fetch /api/tags → liste des modèles
+ useSettings.js ← URL Ollama, température, langue vocale
+ useSpeech.js ← Web Speech API (reconnaissance vocale)
+ useConversations.js ← historique localStorage multi-conversations
+ useTheme.js ← toggle dark/light mode
 ```
 
 ---
@@ -70,12 +70,12 @@ App.vue                          ← racine : état global, routing entre vues
 
 ### Mobile
 - Sidebar en **drawer** (translate-x hors écran, overlay backdrop)
-- Bouton hamburger ☰ dans la TopBar (masqué sur desktop)
+- Bouton hamburger dans la TopBar (masqué sur desktop)
 - Bulles de messages adaptées (`max-w-[85%]` mobile / `max-w-[72%]` desktop)
 - Barre d'outils input simplifiée sur mobile (voix masquée)
 
 ### Thème
-- **Toggle dark/light** (icône ☀️/🌙) via `useTheme.js`
+- **Toggle dark/light** (icône /) via `useTheme.js`
 - Préférence persistée en `localStorage`
 - Implémentation : `filter: invert(1) hue-rotate(180deg)` sur `<html>`
 
@@ -89,10 +89,10 @@ App.vue                          ← racine : état global, routing entre vues
 ## 4. Connexion avec Ollama
 
 ```
-Browser ──HTTPS──▶ Caddy :8443 ──/api/*──▶ Ollama :11434
+Browser HTTPS Caddy :8443 /api/* Ollama :11434
 ```
 
-Le frontend appelle exclusivement `https://4ride.online/api/...` — Caddy proxifie vers Ollama en HTTP local.
+Le frontend appelle exclusivement `https://4ride.online/api/...` - Caddy proxifie vers Ollama en HTTP local.
 
 ### Endpoints utilisés
 
@@ -109,16 +109,16 @@ Le frontend appelle exclusivement `https://4ride.online/api/...` — Caddy proxi
 # Prérequis : Node.js ≥ 18
 cd devweb/
 npm install
-npm run dev      # dev server sur http://localhost:5173
+npm run dev # dev server sur http://localhost:5173
 
 # Build production
-npm run build    # → dist/ (servi par Caddy)
+npm run build # → dist/ (servi par Caddy)
 ```
 
 ### Variables importantes dans `useSettings.js`
 
 ```js
-const DEFAULT_URL = 'https://4ride.online'  // URL Ollama (via proxy Caddy)
+const DEFAULT_URL = 'https://4ride.online' // URL Ollama (via proxy Caddy)
 ```
 
 Pour développer en local avec un Ollama local, changer l'URL dans les paramètres vers `http://localhost:11434`.
