@@ -1,6 +1,15 @@
-# TechCorp AI Chat — Infrastructure
+# TechCorp AI Chat
 
-Serveur d'inférence IA financier basé sur **Ollama + Phi-3.5-Financial**, déployé sans accès root sur Debian 13.
+Assistant IA financier spécialisé basé sur **Ollama + Phi-3.5-Financial**, déployé sans accès root sur Debian 13.  
+Interface accessible sur **https://4ride.online**
+
+---
+
+## Interface
+
+| Écran d'accueil | Vue conversation |
+|---|---|
+| ![Welcome screen](docs/screenshots/welcome-screen.png) | ![Chat view](docs/screenshots/chat-view.png) |
 
 ---
 
