@@ -15,8 +15,8 @@
 | Contexte | 4 096 tokens |
 | Tokens max par réponse | 1 024 |
 | Taille en mémoire | 2 075 MB |
-| Infrastructure | CPU seul (pas de GPU) |
-| Débit moyen | ~7–8 tokens/s |
+| Infrastructure | VM QEMU — 9 vCPUs, 31 GB RAM, CPU seul (pas de GPU) |
+| Débit moyen | ~12–18 tokens/s |
 
 **Méthode de spécialisation :** System prompt engineering (Modelfile) — la base phi3.5 est conservée, un system prompt définit le domaine financier, la rigueur et les normes (IFRS, GAAP, MiFID II, Bâle III).
 
@@ -254,7 +254,7 @@
 ### Limites observées
 - Traduction littérale d'acronymes anglophones (Test 1 : "Déplaiements" pour Amortization)
 - Générations tronquées à 300 tokens — les réponses complètes requièrent num_predict > 512
-- Performances CPU limitées : ~7–8 tokens/s (vs ~80 tokens/s sur GPU)
+- Performances CPU limitées : ~12–18 tokens/s (vs ~80 tokens/s sur GPU)
 
 ### Recommandations
 - Augmenter `num_predict` à 512–1024 pour les questions complexes

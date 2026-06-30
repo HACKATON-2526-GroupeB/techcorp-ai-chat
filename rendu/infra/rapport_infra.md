@@ -1,6 +1,6 @@
 # Rapport INFRA — TechCorp AI Challenge
 **Filière :** Infrastructure · **Date :** 2026-06-30  
-**Serveur :** IA-SERVER (Debian 13, CPU x86-64, sans accès root)  
+**Serveur :** IA-SERVER (Debian 13 trixie, VM QEMU — 9 vCPUs, 31 GB RAM, 140 GB disque, sans accès root)  
 **URL publique :** https://4ride.online
 
 ---
@@ -228,11 +228,12 @@ bash scripts/validate_infra.sh
 | Métrique | Valeur |
 |---|---|
 | Temps de première réponse (CPU) | ~8–15 secondes |
-| Débit token | ~12–18 tokens/s (CPU i7) |
-| Mémoire utilisée | ~2,1 GB RAM |
+| Débit token | ~12–18 tokens/s |
+| Mémoire utilisée | ~2,1 GB RAM (sur 31 GB disponibles) |
 | Contexte max | 4 096 tokens |
+| Serveur | VM QEMU — 9 vCPUs, 31 GB RAM, Debian 13 |
 
-> **Note :** Les performances sont limitées par l'absence de GPU. Un GPU NVIDIA permettrait ×10 à ×20 en débit.
+> **Note :** Les performances sont limitées par l'absence de GPU (VM CPU-only). Un GPU NVIDIA permettrait ×10 à ×20 en débit.
 
 ---
 
