@@ -117,6 +117,10 @@
 .panel-leave-active { transition: transform 0.22s ease-in, opacity 0.2s; }
 .panel-enter-from,.panel-leave-to { transform:translateX(100%); opacity:0; }
 
+/* ── Light mode ── */
+.light-mode { filter: invert(1) hue-rotate(180deg); }
+.light-mode img, .light-mode video { filter: invert(1) hue-rotate(180deg); }
+
 /* Prose overrides */
 .prose pre { background:#0d0d14 !important; border:1px solid rgba(255,255,255,0.08); border-radius:10px; }
 .prose code { background:rgba(124,92,252,0.15) !important; color:#c4b5fd !important; padding:1px 6px; border-radius:4px; font-size:0.85em; }

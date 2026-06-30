@@ -1,17 +1,19 @@
 <script setup>
 import { useModels } from '../../composables/useModels'
 import { useChat }   from '../../composables/useChat'
+import { useTheme }  from '../../composables/useTheme'
 
 defineProps({ ollamaOnline: Boolean })
 defineEmits(['toggle-settings', 'toggle-sidebar'])
 
 const { availableModels } = useModels()
 const { activeModel }     = useChat()
+const { dark, toggle: toggleTheme } = useTheme()
 </script>
 
 <template>
   <header class="flex items-center gap-3 px-4 py-3 border-b border-white/5 flex-shrink-0" style="background:rgba(9,9,11,0.8);backdrop-filter:blur(20px)">
-    <!-- Hamburger (mobile only) -->
+    <!-- Hamburger (mobile) -->
     <button
       class="md:hidden p-2 rounded-lg hover:bg-white/8 text-white/50 hover:text-white transition flex-shrink-0"
       @click="$emit('toggle-sidebar')"
@@ -32,7 +34,7 @@ const { activeModel }     = useChat()
       />
     </div>
 
-    <!-- Model selector (center) -->
+    <!-- Model selector -->
     <div v-if="availableModels.length" class="flex-1 flex justify-center">
       <div class="relative">
         <select
@@ -48,10 +50,19 @@ const { activeModel }     = useChat()
 
     <!-- Icons -->
     <div class="flex items-center gap-1 flex-shrink-0">
-      <button class="p-2 rounded-lg hover:bg-white/8 text-white/40 hover:text-white transition hidden sm:flex" title="Thème">
-        <span class="material-symbols-outlined text-[18px]">light_mode</span>
+      <!-- Theme toggle - actually works now -->
+      <button
+        class="p-2 rounded-lg hover:bg-white/8 text-white/40 hover:text-white transition hidden sm:flex"
+        :title="dark ? 'Mode clair' : 'Mode sombre'"
+        @click="toggleTheme"
+      >
+        <span class="material-symbols-outlined text-[18px]">{{ dark ? 'light_mode' : 'dark_mode' }}</span>
       </button>
-      <button class="p-2 rounded-lg hover:bg-white/8 text-white/40 hover:text-white transition" title="Paramètres" @click="$emit('toggle-settings')">
+      <button
+        class="p-2 rounded-lg hover:bg-white/8 text-white/40 hover:text-white transition"
+        title="Paramètres"
+        @click="$emit('toggle-settings')"
+      >
         <span class="material-symbols-outlined text-[18px]">settings</span>
       </button>
     </div>
