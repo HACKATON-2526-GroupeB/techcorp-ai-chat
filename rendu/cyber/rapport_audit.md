@@ -1,6 +1,6 @@
 # Rapport d'Audit de Sécurité — TechCorp AI Chat
 **Filière :** CYBER · **Date :** 30 juin 2026  
-**Auditrice :** Lisa Quaglieri  
+**Auditeurs :** Lisa Quaglieri · Samuel Namani  
 **Repo audité :** github.com/H04K/hackathon_ynov + déploiement https://4ride.online
 
 ---
