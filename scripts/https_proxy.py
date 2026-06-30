@@ -4,17 +4,48 @@
 import ssl, os, urllib.request, urllib.error
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-BACKEND = os.environ.get("BACKEND", "http://localhost:11434")
-PORT    = int(os.environ.get("PORT", "8443"))
-DOMAIN  = os.environ.get("DOMAIN", "4ride.online")
-SSL_DIR = os.path.join(os.path.dirname(__file__), "ssl")
-CERT    = os.path.join(SSL_DIR, "fullchain.pem")
-KEY     = os.path.join(SSL_DIR, "key.pem")
+BACKEND  = os.environ.get("BACKEND", "http://localhost:11434")
+PORT     = int(os.environ.get("PORT", "8443"))
+DOMAIN   = os.environ.get("DOMAIN", "4ride.online")
+SSL_DIR  = os.path.join(os.path.dirname(__file__), "ssl")
+CERT     = os.path.join(SSL_DIR, "fullchain.pem")
+KEY      = os.path.join(SSL_DIR, "key.pem")
+DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "devweb", "dist")
 
 SKIP_HEADERS = {'host', 'connection', 'transfer-encoding', 'keep-alive'}
 
+MIME = {
+    '.html': 'text/html; charset=utf-8',
+    '.js':   'application/javascript',
+    '.css':  'text/css',
+    '.png':  'image/png',
+    '.svg':  'image/svg+xml',
+    '.ico':  'image/x-icon',
+    '.json': 'application/json',
+}
+
 class ProxyHandler(BaseHTTPRequestHandler):
-    def proxy(self):
+    def serve_static(self):
+        path = self.path.split('?')[0]
+        if path == '/':
+            path = '/index.html'
+        file_path = os.path.normpath(os.path.join(DIST_DIR, path.lstrip('/')))
+        if not file_path.startswith(os.path.abspath(DIST_DIR)):
+            self.send_response(403); self.end_headers(); return
+        if not os.path.isfile(file_path):
+            # SPA fallback
+            file_path = os.path.join(DIST_DIR, 'index.html')
+        ext = os.path.splitext(file_path)[1]
+        mime = MIME.get(ext, 'application/octet-stream')
+        with open(file_path, 'rb') as f:
+            data = f.read()
+        self.send_response(200)
+        self.send_header('Content-Type', mime)
+        self.send_header('Content-Length', len(data))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def proxy_api(self):
         url = BACKEND + self.path
         length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(length) if length else None
@@ -31,15 +62,21 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(resp.read())
         except urllib.error.HTTPError as e:
-            self.send_response(e.code)
-            self.end_headers()
-            self.wfile.write(e.read())
+            self.send_response(e.code); self.end_headers(); self.wfile.write(e.read())
         except Exception as e:
-            self.send_response(502)
-            self.end_headers()
-            self.wfile.write(f"Proxy error: {e}".encode())
+            self.send_response(502); self.end_headers(); self.wfile.write(f"Proxy error: {e}".encode())
 
-    do_GET = do_POST = do_PUT = do_DELETE = do_OPTIONS = do_HEAD = proxy
+    def do_GET(self):
+        if self.path.startswith('/api/'):
+            self.proxy_api()
+        else:
+            self.serve_static()
+
+    def do_POST(self):   self.proxy_api()
+    def do_OPTIONS(self): self.proxy_api()
+    def do_HEAD(self):   self.proxy_api()
+    def do_PUT(self):    self.proxy_api()
+    def do_DELETE(self): self.proxy_api()
 
     def log_message(self, fmt, *args):
         print(f"  {self.address_string()} → {args[0]} {args[1]}")
